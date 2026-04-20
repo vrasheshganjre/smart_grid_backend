@@ -1,0 +1,2 @@
+# Place trained model artefacts here (e.g. model.pkl, model.onnx).
+# This directory is git-ignored; distribute model files separately.

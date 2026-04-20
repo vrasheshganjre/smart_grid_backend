@@ -136,6 +136,12 @@ celerybeat.pid
 
 # Environments
 .env
+
+# Model artefacts (distribute separately, not via git)
+models/*.pkl
+models/*.onnx
+models/*.pt
+models/*.h5
 .envrc
 .venv
 env/

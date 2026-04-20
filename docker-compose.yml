@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: smart-grid-backend:dev
+    container_name: smart_grid_api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Hot-reload: mount source so changes reflect without rebuild
+      - ./app:/app/app
+      # Mount model artefacts directory (create locally first)
+      - ./models:/app/models
+    env_file:
+      - .env
+    command: >
+      uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8000
+      --reload
+    restart: unless-stopped

@@ -1,0 +1,41 @@
+# Version control
+.git/
+.gitignore
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment secrets
+.env
+
+# Model artefacts (mount via volume in dev; inject separately in prod)
+models/*.pkl
+models/*.onnx
+models/*.pt
+models/*.h5
+
+# Editor / OS artefacts
+.vscode/
+.idea/
+*.DS_Store
+
+# Test and coverage output
+htmlcov/
+.coverage
+coverage.xml
+
+# Docker files themselves (not needed inside image)
+Dockerfile
+docker-compose.yml
+.dockerignore
