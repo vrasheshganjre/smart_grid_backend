@@ -1,0 +1,5 @@
+# Development-only dependencies
+ruff==0.11.8
+mypy==1.15.0
+debugpy==1.8.14
+pytest-cov==6.1.1

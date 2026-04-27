@@ -51,39 +51,63 @@ POST /api/v1/predict-csv
 
 ### Prerequisites
 
-- Python 3.12+
-- Docker & Docker Compose (for containerised dev)
+- Python 3.13+
+- (Optional) `pyenv` for managing multiple Python versions
 
-### Local run
+### Local development (preferred)
 
 ```bash
 # 1. Clone and enter the repo
 git clone <repo-url> && cd smart_grid_backend
 
-# 2. Create and activate a virtual environment
-python -m venv .venv && source .venv/bin/activate
+# 2. Create and activate a virtual environment (prefer Python 3.13)
+python3.13 -m venv .venv
+source .venv/bin/activate
 
-# 3. Install dependencies
+# 3. Upgrade pip and install dependencies
+pip install --upgrade pip
 pip install -r requirements.txt
+pip install -r requirements-dev.txt
 
 # 4. Configure environment
 cp .env.example .env
 # Edit .env and fill in WEATHER_API_KEY, MODEL_PATH, etc.
 
 # 5. Start the server (with hot-reload)
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 API docs available at http://localhost:8000/docs
 
-### Docker run
+### Local tooling and helpers
+
+Prefer using a local Python virtual environment for development. To make setup easier, a `Makefile`
+is provided with common targets: `venv`, `install`, `run`, `test`, and `clean`.
+
+Run `make` targets (Linux/macOS):
 
 ```bash
-# Build and start (hot-reload via volume mount)
-docker compose up --build
+# create venv using Python 3.13
+make venv
+# install runtime + dev deps
+make install
+# run the API
+make run
+# run tests
+make test
+```
 
-# Stop
-docker compose down
+If you need Python 3.13, install it via your package manager or `pyenv`:
+
+```bash
+# Debian/Ubuntu (if available)
+sudo apt update && sudo apt install -y python3.13 python3.13-venv
+
+# Or using pyenv
+curl https://pyenv.run | bash
+exec $SHELL
+pyenv install 3.13.0
+pyenv local 3.13.0
 ```
 
 ### Test run
