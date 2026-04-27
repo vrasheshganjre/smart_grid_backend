@@ -110,6 +110,29 @@ pyenv install 3.13.0
 pyenv local 3.13.0
 ```
 
+### Optional: `uv` helper
+
+A small, self-contained `uv` script is included at the repository root to simplify common
+development tasks (create venv, install dependencies, run the server, open a shell, show
+status). Make it executable and use the commands below, or run it with `python uv <cmd>`.
+
+```bash
+# make `uv` executable (optional)
+chmod +x uv
+
+# create venv and install runtime + dev deps
+./uv sync
+
+# run the API (uses venv python)
+./uv run --host 127.0.0.1 --port 8000
+
+# open an interactive shell with the venv on PATH
+./uv shell
+
+# show venv / python / pip status
+./uv status
+```
+
 ### Test run
 
 ```bash
