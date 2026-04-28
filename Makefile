@@ -1,23 +1,21 @@
-PYTHON ?= python3.13
-VENV_DIR := .venv
-PIP := $(VENV_DIR)/bin/pip
-PY := $(VENV_DIR)/bin/python
+UV ?= uv
+PYTHON ?= 3.12
+HOST ?= 127.0.0.1
+PORT ?= 8000
 
 .PHONY: venv install run test clean
 
 venv:
-	$(PYTHON) -m venv $(VENV_DIR)
+	$(UV) venv --python $(PYTHON)
 
-install: venv
-	$(PIP) install --upgrade pip
-	$(PIP) install -r requirements.txt
-	$(PIP) install -r requirements-dev.txt
+install:
+	$(UV) sync
 
 run: install
-	$(VENV_DIR)/bin/uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+	$(UV) run uvicorn app.main:app --reload --host $(HOST) --port $(PORT)
 
 test: install
-	$(VENV_DIR)/bin/pytest tests -q
+	$(UV) run pytest tests -q
 
 clean:
-	rm -rf $(VENV_DIR)
+	rm -rf .venv

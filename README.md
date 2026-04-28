@@ -51,7 +51,8 @@ POST /api/v1/predict-csv
 
 ### Prerequisites
 
-- Python 3.13+
+- Python 3.12+
+- [Astral uv](https://docs.astral.sh/uv/)
 - (Optional) `pyenv` for managing multiple Python versions
 
 ### Local development (preferred)
@@ -60,36 +61,48 @@ POST /api/v1/predict-csv
 # 1. Clone and enter the repo
 git clone <repo-url> && cd smart_grid_backend
 
-# 2. Create and activate a virtual environment (prefer Python 3.13)
-python3.13 -m venv .venv
-source .venv/bin/activate
+# 2. Install dependencies and create the project virtualenv
+uv sync
 
-# 3. Upgrade pip and install dependencies
-pip install --upgrade pip
-pip install -r requirements.txt
-pip install -r requirements-dev.txt
-
-# 4. Configure environment
+# 3. Configure environment
 cp .env.example .env
 # Edit .env and fill in WEATHER_API_KEY, MODEL_PATH, etc.
 
-# 5. Start the server (with hot-reload)
-uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+# 4. Start the server (with hot-reload)
+uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Windows PowerShell:
+
+```powershell
+# 1. Clone and enter the repo
+git clone <repo-url>
+cd smart_grid_backend
+
+# 2. Install dependencies and create the project virtualenv
+uv sync
+
+# 3. Configure environment
+Copy-Item .env.example .env
+# Edit .env and fill in WEATHER_API_KEY, MODEL_PATH, etc.
+
+# 4. Start the server (with hot-reload)
+uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 API docs available at http://localhost:8000/docs
 
 ### Local tooling and helpers
 
-Prefer using a local Python virtual environment for development. To make setup easier, a `Makefile`
+Prefer using Astral `uv` to manage the project environment and commands. A `Makefile`
 is provided with common targets: `venv`, `install`, `run`, `test`, and `clean`.
 
 Run `make` targets (Linux/macOS):
 
 ```bash
-# create venv using Python 3.13
+# create venv using uv
 make venv
-# install runtime + dev deps
+# sync dependencies from pyproject.toml / uv.lock
 make install
 # run the API
 make run
@@ -97,46 +110,63 @@ make run
 make test
 ```
 
-If you need Python 3.13, install it via your package manager or `pyenv`:
+On Windows, prefer calling `uv` directly instead of `make`:
+
+```powershell
+uv sync
+uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+uv run pytest tests -v
+```
+
+If you need Python 3.12, install it via your package manager, `pyenv`, or `uv`:
 
 ```bash
-# Debian/Ubuntu (if available)
-sudo apt update && sudo apt install -y python3.13 python3.13-venv
+# install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+#----INSTALL ONLY IF YOU DON'T HAVE PYTHON 3.12 OR HIGHER----
+# install Python 3.12 via uv
+uv python install 3.12
 
 # Or using pyenv
 curl https://pyenv.run | bash
 exec $SHELL
-pyenv install 3.13.0
-pyenv local 3.13.0
+pyenv install 3.12.0
+pyenv local 3.12.0
 ```
 
-### Optional: `uv` helper
+Windows options:
 
-A small, self-contained `uv` script is included at the repository root to simplify common
-development tasks (create venv, install dependencies, run the server, open a shell, show
-status). Make it executable and use the commands below, or run it with `python uv <cmd>`.
+```powershell
+# install uv with winget
+winget install --id AstralSoftware.UV
+
+# install Python 3.12 via uv
+uv python install 3.12
+```
+
+### Astral `uv` commands
+
+The repository uses Astral `uv` directly. Common commands:
 
 ```bash
-# make `uv` executable (optional)
-chmod +x uv
+# create/update the environment from uv.lock
+uv sync
 
-# create venv and install runtime + dev deps
-./uv sync
+# run the API with uvicorn inside the project environment
+uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
-# run the API (uses venv python)
-./uv run --host 127.0.0.1 --port 8000
+# run the test suite
+uv run pytest tests -v
 
-# open an interactive shell with the venv on PATH
-./uv shell
-
-# show venv / python / pip status
-./uv status
+# inspect the active environment
+uv pip list
 ```
 
 ### Test run
 
 ```bash
-pytest tests/ -v
+uv run pytest tests/ -v
 ```
 
 ---
